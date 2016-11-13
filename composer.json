@@ -1,0 +1,30 @@
+{
+    "name": "laraish/options",
+    "description": "Package for creating options page in WordPress.",
+    "keywords": [
+        "framework",
+        "laravel",
+        "wordpress"
+    ],
+    "license": "MIT",
+    "homepage": "https://github.com/laraish/options",
+    "support": {
+        "issues": "https://github.com/laraish/options/issues",
+        "source": "https://github.com/laraish/options"
+    },
+    "authors": [
+        {
+            "name": "yaquawa",
+            "email": "yaquawa@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.4",
+        "laraish/contracts": "0.1.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Laraish\\Options\\": "./"
+        }
+    }
+}

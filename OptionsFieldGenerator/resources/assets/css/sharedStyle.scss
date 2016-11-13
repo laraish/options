@@ -1,0 +1,19 @@
+.laraish-show-if-value, .laraish-show-if-value--inline-block {
+    display: none;
+}
+
+.laraish-hide-if-value {
+    display: block;
+}
+
+.laraish-has-value {
+    .laraish-show-if-value {
+        display: block;
+    }
+    .laraish-show-if-value--inline-block {
+        display: inline-block;
+    }
+    .laraish-hide-if-value {
+        display: none;
+    }
+}

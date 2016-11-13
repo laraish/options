@@ -1,0 +1,43 @@
+.laraish-file-field__media {
+  position: relative;
+  text-align: center; }
+  .laraish-file-field__media:hover .laraish-file-field__controller {
+    opacity: 1;
+    transform: translateY(-2em); }
+  .laraish-file-field__media.image .laraish-file-field__filename {
+    display: none; }
+  .laraish-file-field__media.application {
+    max-width: 15em;
+    background-color: #fdfdfd;
+    padding: 1em;
+    border: 1px solid #e0e0e0; }
+
+.laraish-file-field__controller {
+  position: absolute;
+  left: 1em;
+  top: 1em;
+  margin: 0;
+  border-radius: 5px;
+  box-shadow: 0 25px 53px rgba(0, 0, 0, 0.45);
+  background-color: #fff;
+  padding: 0.5em;
+  opacity: 0;
+  transition: 0.4s ease-in-out; }
+  .laraish-file-field__controller li:last-child {
+    margin-bottom: 0; }
+
+.laraish-file-field__img {
+  display: inline-block;
+  vertical-align: bottom; }
+
+.laraish-file-field__filename {
+  line-height: 1;
+  margin-top: 1em;
+  padding-top: 0.8em;
+  border-top: 1px solid #e4e4e4;
+  font-size: 12px;
+  text-align: center;
+  font-weight: 600;
+  word-wrap: break-word; }
+
+/*# sourceMappingURL=file.css.map */
