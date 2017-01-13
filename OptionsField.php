@@ -51,7 +51,7 @@ class OptionsField implements OptionsFieldContract
 
     /**
      * Function that fills the field with the desired content. The function should echo its output.
-     * This function will be given two arguments which are `SettingsField` and `SettingsForm` object.
+     * This function will be given an argument(array) with two elements `field`(OptionsField) and `form`(OptionsForm) object.
      * @var callable
      */
     private $renderFunction;

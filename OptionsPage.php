@@ -66,7 +66,7 @@ class OptionsPage implements OptionsPageContract
     private $optionGroup;
 
     /**
-     * The option group you wish to use in this page.
+     * The option name you wish to use in this page.
      * @var string
      */
     private $optionName;
@@ -78,13 +78,13 @@ class OptionsPage implements OptionsPageContract
     private $renderFunction;
 
     /**
-     * The script to be enqueued.
+     * The scripts to be enqueued.
      * @var array
      */
     private $scripts = [];
 
     /**
-     * The style to be enqueued.
+     * The styles to be enqueued.
      * @var array
      */
     private $styles = [];
