@@ -396,7 +396,7 @@ Function that fills the section with the desired content. The function should ec
 |----------|-------- |
 | array    | []      |
 
-settings fields in the section. See [Options for OptionsField](#options-for-optionsField) for more details.
+settings fields in the section. See [Options for OptionsField](#options-2) for more details.
 
 ### `capability`
 | Type   | Default          |
@@ -431,7 +431,7 @@ The title of this field.
 |--------|-------- |
 | string | 'text'  |
 
-The type of the field. Default is 'text'.
+The type of the field. Default is 'text'. See [Field types](#field-types) for more details.
 
 ### capability
 | Type   | Default          |
