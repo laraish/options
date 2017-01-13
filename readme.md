@@ -283,7 +283,7 @@ If you wish to make the page as a sub-page of a top-level page, set the top top-
 | array | []      |
 
 Settings-Sections to be inserted into the page. Every element of this array represents a Settings-Section.  
-See [Options for OptionsSection](#options-for-optionsSection) for more details.
+See [Options for OptionsSection](#options-1) for more details.
 
 ### `renderFunction`
 | Type     | Default |
@@ -467,40 +467,40 @@ For example <code>['placeholder'=> 'Type your name', 'class'=> 'foo bar baz']</c
 </dl>
 
 ## Color
-Same as [Common Options](common-options).
+Same as [Common Options](#common-options).
 
 ## Date
-Same as [Common Options](common-options).
+Same as [Common Options](#common-options).
 
 ## Email
-Same as [Common Options](common-options).
+Same as [Common Options](#common-options).
 
 ## Hidden
-Same as [Common Options](common-options).
+Same as [Common Options](#common-options).
 
 ## Number
-Same as [Common Options](common-options).
+Same as [Common Options](#common-options).
 
 ## Password
-Same as [Common Options](common-options).
+Same as [Common Options](#common-options).
 
 ## Range
-Same as [Common Options](common-options).
+Same as [Common Options](#common-options).
 
 ## Search
-Same as [Common Options](common-options).
+Same as [Common Options](#common-options).
 
 ## Textarea
-Same as [Common Options](common-options).
+Same as [Common Options](#common-options).
 
 ## Text
-Same as [Common Options](common-options).
+Same as [Common Options](#common-options).
 
 ## Time
-Same as [Common Options](common-options).
+Same as [Common Options](#common-options).
 
 ## Url
-Same as [Common Options](common-options).
+Same as [Common Options](#common-options).
 
 ## Checkboxes
 <dl>
