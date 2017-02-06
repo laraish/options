@@ -20,7 +20,8 @@
     ],
     "require": {
         "php": ">=5.6.4",
-        "laraish/contracts": "0.1.*"
+        "laraish/contracts": "0.1.*",
+        "laraish/support": "0.1.*"
     },
     "autoload": {
         "psr-4": {
