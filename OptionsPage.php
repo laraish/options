@@ -200,7 +200,11 @@ class OptionsPage implements OptionsPageContract
     public function render()
     {
         // Display settings errors registered by `add_settings_error()`.
-        settings_errors();
+        // It's not necessary to call `settings_errors()` when the page is a sub-page of `Settings` page.
+        // Because WordPress will call it automatically (see `wp-admin/options-head.php`)
+        if ($GLOBALS['parent_file'] !== 'options-general.php') {
+            settings_errors();
+        }
 
         if (isset($this->renderFunction)) {
             $form = new OptionsForm(OptionsRepository::getInstance($this->optionName()), $this->menuSlug());
