@@ -50,8 +50,14 @@ class FileFieldGenerator extends BaseFieldGenerator
      */
     public function sanitize($filesInfo)
     {
-        if ($filesInfo === 'laraish::removeFileField') {
-            return null;
+        $defaultValue = $this->defaultConfigs['defaultValue'];
+        if ($filesInfo === 'laraish::removeFileField' OR $filesInfo == []) {
+            return $defaultValue;
+        }
+
+        // If the $filesInfo has been sanitized, return it.
+        if (array_key_exists('content', $filesInfo)) {
+            return $filesInfo;
         }
 
         $fieldId     = $this->fieldId;
@@ -150,7 +156,7 @@ class FileFieldGenerator extends BaseFieldGenerator
 
         $content = $data['content'] = file_get_contents($tempFile);
         if ($this->config('isJson')) {
-            $json = json_encode($content);
+            $json = json_decode($content);
             if ( ! $json) {
                 $errorMessage = "The uploaded file `{$this->config('title')}` should be a valid json file.";
                 add_settings_error($fieldId, 'file_upload_failed', $errorMessage);
