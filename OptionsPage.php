@@ -162,7 +162,13 @@ class OptionsPage implements OptionsPageContract
             };
         }
 
+        // register options page.
         add_action('admin_menu', $registerFunction);
+
+        // register setting for this options page.
+        add_action('admin_init', function () {
+            register_setting($this->optionGroup(), $this->optionName());
+        });
 
         // if there are any sections append them into this page.
         if ($this->sections) {
