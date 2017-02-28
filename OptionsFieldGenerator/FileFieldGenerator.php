@@ -156,7 +156,7 @@ class FileFieldGenerator extends BaseFieldGenerator
 
         $content = $data['content'] = file_get_contents($tempFile);
         if ($this->config('isJson')) {
-            $json = json_decode($content);
+            $json = json_decode($content, $this->config('assoc') === true ? true : false);
             if ( ! $json) {
                 $errorMessage = "The uploaded file `{$this->config('title')}` should be a valid json file.";
                 add_settings_error($fieldId, 'file_upload_failed', $errorMessage);
