@@ -99,7 +99,9 @@ abstract class BaseFieldGenerator implements OptionsFieldGeneratorContract
             return;
         }
 
-        $assetsUrl = home_url(str_replace(ABSPATH, '', __DIR__)) . '/resources/assets/';
+        $absolutePath = str_replace('\\', '/', ABSPATH);
+        $currentDir   = str_replace('\\', '/', __DIR__);
+        $assetsUrl    = home_url(str_replace($absolutePath, '', $currentDir)) . '/resources/assets/';
 
         add_action('admin_enqueue_scripts', function ($hook) use ($optionsPage, $assetsUrl) {
             $thisPageHookSuffix = '_page_' . $optionsPage;
