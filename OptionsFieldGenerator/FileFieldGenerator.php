@@ -12,6 +12,7 @@ class FileFieldGenerator extends BaseFieldGenerator
         'attributes'   => [],
         'maxFileSize'  => null,
         'isJson'       => false,
+        'assoc'        => false,
         'defaultValue' => []
     ];
 
