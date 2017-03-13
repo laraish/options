@@ -20,9 +20,7 @@ class UrlFieldGenerator extends BaseFieldGenerator
      */
     final public function generate()
     {
-        $allAttributes = $this->allAttributes();
-
-        return "<input type=\"url\" {$allAttributes}>" . $this->generateDescription();
+        return $this->generateInput('url');
     }
 
     /**

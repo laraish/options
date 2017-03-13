@@ -2,6 +2,8 @@
 
 namespace Laraish\Options\OptionsFieldGenerator;
 
+use Laraish\Support\Arr;
+
 class SelectFieldGenerator extends BaseFieldGenerator
 {
     /**
@@ -9,11 +11,16 @@ class SelectFieldGenerator extends BaseFieldGenerator
      * @var array
      */
     protected $defaultConfigs = [
-        'horizontal'   => true,
+        'richMode'     => false,
         'options'      => [],
-        'attributes'   => [],
+        'multiple'     => false,
+        'attributes'   => ['class' => 'regular-text'],
         'defaultValue' => ''
     ];
+
+    static protected $scripts = ['js/libs/selectize.js', 'js/selectFieldGenerator.js'];
+
+    static protected $styles = ['css/libs/selectize.css'];
 
     /**
      * Generate the field markup.
@@ -23,37 +30,70 @@ class SelectFieldGenerator extends BaseFieldGenerator
     final public function generate()
     {
         $innerHTML     = '';
-        $selectedValue = $this->fieldValue;
+        $selectedValue = Arr::cast($this->fieldValue);
 
-        foreach ($this->config('options') as $optionText => $optionValue) {
+        if ($this->config('richMode') === true) {
+            $this->configs['attributes']['class'] .= ' laraish-select';
+        }
+
+        $options = Arr::cast($this->config('options'));
+
+        if (Arr::isSequential($options)) {
+            $options = array_combine($options, $options);
+        }
+
+        foreach ($options as $optionText => $optionValue) {
             // if it's not an option group
             if ( ! is_array($optionValue)) {
                 $escapedOptionText = esc_html($optionText);
-                $OptionAttributes  = static::convertToAttributesString(['value' => $optionValue, 'selected' => $selectedValue === (string)$optionValue ? 'selected' : null]);
+                $isSelected        = in_array((string)$optionValue, $selectedValue);
+                $OptionAttributes  = static::convertToAttributesString(['value' => $optionValue, 'selected' => $isSelected ? 'selected' : null]);
                 $innerHTML .= "<option {$OptionAttributes}>{$escapedOptionText}</option>";
             } else {
                 $innerHTML .= "<optgroup label=\"{$optionText}\">";
+                if (Arr::isSequential($optionValue)) {
+                    $optionValue = array_combine($optionValue, $optionValue);
+                }
                 foreach ($optionValue as $optionTextInGroup => $optionValueInGroup) {
                     $escapedOptionText = esc_html($optionTextInGroup);
-                    $OptionAttributes  = static::convertToAttributesString(['value' => $optionValueInGroup, 'selected' => $selectedValue === (string)$optionValueInGroup ? 'selected' : null]);
+                    $isSelected        = in_array((string)$optionValueInGroup, $selectedValue);
+                    $OptionAttributes  = static::convertToAttributesString(['value' => $optionValueInGroup, 'selected' => $isSelected ? 'selected' : null]);
                     $innerHTML .= "<option {$OptionAttributes}>{$escapedOptionText}</option>";
                 }
                 $innerHTML .= '</optgroup>';
             }
         }
 
-        // add placeholder if possible
+        // Add placeholder if possible
         $placeholder = $this->config('placeholder');
         if ( ! empty($innerHTML) AND $placeholder AND $selectedValue === null) {
             $placeHolderOption = "<option value=\"\" disabled selected=\"selected\">{$placeholder}</option>";
             $innerHTML         = $placeHolderOption . $innerHTML;
         }
 
-        //return $this->field($name, $additionalAttributes, 'select', $innerHTML, false);
-        $allAttributes = static::convertToAttributesString(array_merge($this->config('attributes'), ['name' => $this->fieldName]));
+        // If `multiple` is allowed append `[]` to the end of `name` attribute,
+        // so we can receive the data as array instead of string.
+        $isMultiple = $this->config('multiple');
+        $attributes = ['name' => $this->fieldName . ($isMultiple ? '[]' : '')];
+        if ($isMultiple) {
+            $attributes['multiple'] = 'multiple';
+        }
 
-        return "<select {$allAttributes}>{$innerHTML}</select>" . $this->generateDescription();
+        $allAttributes = array_merge($this->config('attributes'), $attributes);
+        $allAttributes = static::convertToAttributesString($allAttributes);
+
+        $html = "<select {$allAttributes}>{$innerHTML}</select>";
+
+        // Add help link if possible
+        if ($helpLink = $this->generateHelpLink()) {
+            $html = '<div class="laraish-flex-line">' . $html . "{$helpLink}</div>";
+        }
+
+        $html .= $this->generateDescription();
+
+        return $html;
     }
+
 
     /**
      * An option could be potentially set to a value before the field saving its value to the database for the first time.
@@ -67,7 +107,7 @@ class SelectFieldGenerator extends BaseFieldGenerator
      */
     protected function validateFieldValue($value)
     {
-        return is_string($value);
+        return is_string($value) OR is_array($value);
     }
 
 }

@@ -2,8 +2,10 @@
 
 namespace Laraish\Options;
 
+use InvalidArgumentException;
 use Laraish\Contracts\Options\OptionsPage as OptionsPageContract;
 use Laraish\Contracts\Options\OptionsSection as OptionsSectionContract;
+use Laraish\Support\Arr;
 use Laraish\Support\Traits\ClassHelper;
 
 class OptionsPage implements OptionsPageContract
@@ -187,7 +189,7 @@ class OptionsPage implements OptionsPageContract
         if (empty($this->helpTabs)) {
             return;
         }
-        
+
         add_action("load-{$hookSuffix}", function () {
             $screen = get_current_screen();
             foreach ($this->helpTabs as $index => $helpTab) {
@@ -252,22 +254,78 @@ class OptionsPage implements OptionsPageContract
 
             $thisPageHookSuffix = '_page_' . $this->menuSlug();
             if (preg_match("/{$thisPageHookSuffix}$/", $hook)) {
-                $prefix = $this->menuSlug() . '__' . static::class;
+                $prefix = $this->menuSlug() . '__' . static::class . '__';
 
                 if ($this->scripts()) {
-                    foreach ((array)$this->scripts() as $scriptUrl) {
-                        $scriptName = pathinfo($scriptUrl)['basename'];
-                        wp_enqueue_script("{$prefix}__{$scriptName}", $scriptUrl, ['jquery', 'underscore', 'backbone']);
+                    foreach ((array)$this->scripts() as $script) {
+                        static::enqueueAsset($script, 'script', $prefix);
                     }
                 }
                 if ($this->styles()) {
-                    foreach ((array)$this->styles() as $styleUrl) {
-                        $styleName = pathinfo($styleUrl)['basename'];
-                        wp_enqueue_style("{$prefix}__{$styleName}", $styleUrl);
+                    foreach ((array)$this->styles() as $style) {
+                        static::enqueueAsset($style, 'style', $prefix);
                     }
                 }
             }
         });
+    }
+
+    /**
+     * Enqueue an style or script
+     *
+     * @param string|array $asset <String>: The asset url or 'handle'. <Array>: The arguments passed to `wp_enqueue_style()` or `wp_enqueue_script()`.
+     * @param string $type        The type of the asset. Must be 'script' or 'style'.
+     * @param string $prefix      The prefix of the asset name. Ignored if the $asset is an array.
+     */
+    static public function enqueueAsset($asset, $type, $prefix = 'laraish__')
+    {
+        if ( ! in_array($type, ['script', 'style'])) {
+            throw new InvalidArgumentException("The '\$type' argument should be either 'script' or 'style'. The given argument is '$type'.");
+        }
+
+        $scriptDependencies = ['jquery', 'underscore', 'backbone'];
+
+        if (is_array($asset)) {
+            if (Arr::isSequential($asset)) {
+                call_user_func_array("wp_enqueue_$type", $asset);
+            } else {
+                if ( ! isset($asset['name'])) {
+                    throw new InvalidArgumentException('The `name` key is required.');
+                }
+
+                $defaults = [
+                    'src'          => '',
+                    'dependencies' => [],
+                    'version'      => false,
+                    'media'        => 'all',
+                    'in_footer'    => false
+                ];
+
+                $args = array_merge($defaults, $asset);
+
+                if ($type === 'style') {
+                    wp_enqueue_style($args['name'], $args['src'], $args['dependencies'], $args['version'], $args['media']);
+                } else {
+                    if ( ! isset($asset['dependencies'])) {
+                        $args['dependencies'] = $scriptDependencies;
+                    }
+                    wp_enqueue_script($args['name'], $args['src'], $args['dependencies'], $args['version'], $args['in_footer']);
+                }
+            }
+        } else {
+            $assetName = $asset;
+
+            // If asset is a URL
+            if (filter_var($asset, FILTER_VALIDATE_URL)) {
+                $assetName = $prefix . pathinfo($asset)['basename'];
+            }
+
+            if ($type === 'style') {
+                wp_enqueue_style($assetName, $asset);
+            } else {
+                wp_enqueue_script($assetName, $asset, $scriptDependencies);
+            }
+        }
     }
 
     /**

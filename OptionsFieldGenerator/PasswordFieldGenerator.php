@@ -22,7 +22,7 @@ class PasswordFieldGenerator extends BaseFieldGenerator
     {
         $allAttributes = static::convertToAttributesString(array_merge($this->config('attributes'), ['name' => $this->fieldName]));
 
-        return "<input type=\"password\" {$allAttributes}>" . $this->generateDescription();
+        return $this->generateInput('password', $allAttributes);
     }
 
     /**

@@ -13,18 +13,6 @@ class TextFieldGenerator extends BaseFieldGenerator
         'defaultValue' => ''
     ];
 
-
-    final public static function generateDatalist($id, array $optionValues)
-    {
-        $innerHTML = '';
-
-        foreach ($optionValues as $optionValue) {
-            $innerHTML .= "<option value=\"{$optionValue}\">";
-        }
-
-        return "<datalist id=\"{$id}\">{$innerHTML}</datalist>";
-    }
-
     /**
      * Generate the field markup.
      *
@@ -32,15 +20,7 @@ class TextFieldGenerator extends BaseFieldGenerator
      */
     final public function generate()
     {
-        $allAttributes = $this->allAttributes();
-        $datalistHtml  = '';
-
-        if ($datalist = $this->config('datalist')) {
-            $datalistHtml = static::generateDatalist($datalist['id'], $datalist['data']);
-            $allAttributes .= " list=\"{$datalist['id']}\"";
-        }
-
-        return "<input type=\"text\" {$allAttributes}>\n{$datalistHtml}" . $this->generateDescription();
+        return $this->generateInput('text');
     }
 
     /**

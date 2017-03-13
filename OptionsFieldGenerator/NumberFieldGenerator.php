@@ -20,9 +20,7 @@ class NumberFieldGenerator extends BaseFieldGenerator
      */
     final public function generate()
     {
-        $allAttributes = $this->allAttributes();
-
-        return "<input type=\"number\" {$allAttributes}>" . $this->generateDescription();
+        return $this->generateInput('number');
     }
 
     /**

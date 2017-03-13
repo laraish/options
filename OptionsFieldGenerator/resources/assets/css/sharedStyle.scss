@@ -17,3 +17,39 @@
         display: none;
     }
 }
+
+.laraish-flex-line {
+    display: inline-flex;
+    width: 100%;
+}
+
+.laraish-input-group {
+    display: flex;
+}
+
+.laraish-input-group-addon {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    &:first-child {
+        padding-right: 0.5rem;
+    }
+    &:last-child {
+        padding-left: 0.5rem;
+    }
+}
+
+.laraish-help-link {
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    color: currentColor;
+    opacity: 0.5;
+    &:hover {
+        opacity: 1;
+    }
+}
+

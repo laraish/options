@@ -20,9 +20,7 @@ class EmailFieldGenerator extends BaseFieldGenerator
      */
     final public function generate()
     {
-        $allAttributes = $this->allAttributes();
-
-        return "<input type=\"email\" {$allAttributes}>" . $this->generateDescription();
+        return $this->generateInput('email');
     }
 
     /**

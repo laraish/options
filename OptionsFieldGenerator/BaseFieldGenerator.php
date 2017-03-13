@@ -5,6 +5,7 @@ namespace Laraish\Options\OptionsFieldGenerator;
 use InvalidArgumentException;
 use Laraish\Contracts\Options\OptionsRepository as OptionsRepositoryContract;
 use Laraish\Contracts\Options\OptionsFieldGenerator as OptionsFieldGeneratorContract;
+use Laraish\Options\OptionsPage;
 use Laraish\Support\Template;
 
 abstract class BaseFieldGenerator implements OptionsFieldGeneratorContract
@@ -106,18 +107,24 @@ abstract class BaseFieldGenerator implements OptionsFieldGeneratorContract
         add_action('admin_enqueue_scripts', function ($hook) use ($optionsPage, $assetsUrl) {
             $thisPageHookSuffix = '_page_' . $optionsPage;
             if (preg_match("/{$thisPageHookSuffix}$/", $hook)) {
-                $prefix = $optionsPage . '__' . static::class;
+                $prefix = $optionsPage . '__' . static::class . '__';
 
                 if (static::$scripts) {
                     foreach ((array)static::$scripts as $script) {
-                        $scriptName = pathinfo($script)['basename'];
-                        wp_enqueue_script("{$prefix}__{$scriptName}", $assetsUrl . trim($script, '/'), ['jquery', 'underscore', 'backbone']);
+                        if (filter_var($script, FILTER_VALIDATE_URL) === false) {
+                            $script = $assetsUrl . trim($script, '/');
+                        }
+
+                        OptionsPage::enqueueAsset($script, 'script', $prefix);
                     }
                 }
                 if (static::$styles) {
                     foreach ((array)static::$styles as $style) {
-                        $styleName = pathinfo($style)['basename'];
-                        wp_enqueue_style("{$prefix}__{$styleName}", $assetsUrl . trim($style, '/'));
+                        if (filter_var($style, FILTER_VALIDATE_URL) === false) {
+                            $style = $assetsUrl . trim($style, '/');
+                        }
+
+                        OptionsPage::enqueueAsset($style, 'style', $prefix);
                     }
                 }
             }
@@ -170,6 +177,25 @@ abstract class BaseFieldGenerator implements OptionsFieldGeneratorContract
     }
 
     /**
+     * Generate a datalist element markup.
+     *
+     * @param string $id
+     * @param array $optionValues
+     *
+     * @return string
+     */
+    final public static function generateDatalist($id, array $optionValues)
+    {
+        $innerHTML = '';
+
+        foreach ($optionValues as $optionValue) {
+            $innerHTML .= "<option value=\"{$optionValue}\">";
+        }
+
+        return "<datalist id=\"{$id}\">{$innerHTML}</datalist>";
+    }
+
+    /**
      * Field generator constructor.
      *
      * @param string $fieldName                  The name of this field.
@@ -188,7 +214,7 @@ abstract class BaseFieldGenerator implements OptionsFieldGeneratorContract
 
 
         $this->options = $options;
-        $this->configs = array_merge($this->defaultConfigs, $configs);
+        $this->configs = array_replace_recursive($this->defaultConfigs, $configs);
 
         $this->fieldId    = $fieldName;
         $this->fieldName  = $this->normalizeFieldName($fieldName);
@@ -322,6 +348,59 @@ abstract class BaseFieldGenerator implements OptionsFieldGeneratorContract
         }
 
         return $markUp;
+    }
+
+    /**
+     * Generate the help link for the field.
+     * @return string
+     */
+    protected function generateHelpLink()
+    {
+        $markUp = '';
+
+        if ($helpLink = $this->config('helpLink')) {
+            $markUp = "<a href=\"{$helpLink}\" target=\"_blank\" class=\"laraish-help-link\"><i class=\"dashicons-before dashicons-info\"></i></a>";
+        }
+
+        return $markUp;
+    }
+
+    protected function generateInput($type, $allAttributes = null)
+    {
+        $allAttributes = $allAttributes ?: $this->allAttributes();
+
+        // Add `list` attribute if possible
+        if ($datalist = $this->config('datalist')) {
+            $datalistHtml = static::generateDatalist($datalist['id'], $datalist['data']);
+            $allAttributes .= " list=\"{$datalist['id']}\"";
+        }
+
+        // Create the `input` html
+        $html = "<input type=\"{$type}\" {$allAttributes}>";
+
+        // Add `datalist` element if possible
+        if (isset($datalistHtml)) {
+            $html .= $datalistHtml;
+        }
+
+        // Add prefix and suffix if possible
+        $suffix = $this->config('suffix');
+        $prefix = $this->config('prefix');
+        if ($suffix OR $prefix) {
+            $suffix = $suffix ? "<span class=\"laraish-input-group-addon\">{$suffix}</span>" : '';
+            $prefix = $prefix ? "<span class=\"laraish-input-group-addon\">{$prefix}</span>" : '';
+            $html   = "<div class=\"laraish-input-group\">{$prefix}" . $html . "{$suffix}</div>";
+        }
+
+        // Add help link if possible
+        if ($helpLink = $this->generateHelpLink()) {
+            $html = '<div class="laraish-flex-line">' . $html . "{$helpLink}</div>";
+        }
+
+        // Add the description
+        $html .= $this->generateDescription();
+
+        return $html;
     }
 
     /**

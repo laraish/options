@@ -20,9 +20,7 @@ class ColorFieldGenerator extends BaseFieldGenerator
      */
     final public function generate()
     {
-        $allAttributes = $this->allAttributes();
-
-        return "<input type=\"color\" {$allAttributes}>" . $this->generateDescription();
+        return $this->generateInput('color');
     }
 
     /**

@@ -9,7 +9,7 @@ class SearchFieldGenerator extends BaseFieldGenerator
      * @var array
      */
     protected $defaultConfigs = [
-        'attributes'   => [],
+        'attributes'   => ['class' => 'regular-text'],
         'defaultValue' => ''
     ];
 
@@ -20,9 +20,7 @@ class SearchFieldGenerator extends BaseFieldGenerator
      */
     final public function generate()
     {
-        $allAttributes = $this->allAttributes();
-
-        return "<input type=\"search\" {$allAttributes}>" . $this->generateDescription();
+        return $this->generateInput('search');
     }
 
     /**

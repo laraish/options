@@ -11,4 +11,32 @@
 .laraish-has-value .laraish-hide-if-value {
   display: none; }
 
+.laraish-flex-line {
+  display: inline-flex;
+  width: 100%; }
+
+.laraish-input-group {
+  display: flex; }
+
+.laraish-input-group-addon {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle; }
+  .laraish-input-group-addon:first-child {
+    padding-right: 0.5rem; }
+  .laraish-input-group-addon:last-child {
+    padding-left: 0.5rem; }
+
+.laraish-help-link {
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
+  color: currentColor;
+  opacity: 0.5; }
+  .laraish-help-link:hover {
+    opacity: 1; }
+
 /*# sourceMappingURL=sharedStyle.css.map */
