@@ -110,6 +110,16 @@ class OptionsRepository implements OptionsRepositoryContract
     }
 
     /**
+     * Delete the option from database.
+     *
+     * @return boolean
+     */
+    public function delete()
+    {
+        return delete_option($this->optionName());
+    }
+
+    /**
      * Get the option-name
      * @return string
      */
