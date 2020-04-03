@@ -135,7 +135,7 @@ class FileFieldGenerator extends BaseFieldGenerator
 
         $finfo         = new \finfo(FILEINFO_MIME);
         $type          = $finfo->file($tempFile);
-        $isNotTextFile = ! preg_match('@^text/@', $type);
+        $isNotTextFile = ! preg_match('@text|json@', $type);
         if ($isNotTextFile) {
             $errorMessage = "The format of uploaded file `{$this->config('title')}` is not acceptable.";
             add_settings_error($fieldId, 'file_upload_failed', $errorMessage);
