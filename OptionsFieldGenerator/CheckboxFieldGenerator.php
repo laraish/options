@@ -9,10 +9,10 @@ class CheckboxFieldGenerator extends BaseFieldGenerator
      * @var array
      */
     protected $defaultConfigs = [
-        'value'        => '',
-        'text'         => '',
-        'attributes'   => [],
-        'defaultValue' => ''
+        'value' => '',
+        'text' => '',
+        'attributes' => [],
+        'defaultValue' => '',
     ];
 
     /**
@@ -23,15 +23,15 @@ class CheckboxFieldGenerator extends BaseFieldGenerator
     final public function generate()
     {
         $optionValue = $this->fieldValue;
-        $text        = $this->config('text');
-        $value       = $this->config('value');
-        $checked     = (string)$value === $optionValue ? 'checked' : null;
+        $text = $this->config('text');
+        $value = $this->config('value');
+        $checked = (string) $value === $optionValue ? 'checked' : null;
 
         $attributes = static::convertToAttributesString([
-            'type'    => 'checkbox',
-            'name'    => $this->fieldName,
-            'value'   => $value,
-            'checked' => $checked
+            'type' => 'checkbox',
+            'name' => $this->fieldName,
+            'value' => $value,
+            'checked' => $checked,
         ]);
 
         $innerHTML = "<input {$attributes}>";

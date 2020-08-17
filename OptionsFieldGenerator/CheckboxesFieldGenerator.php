@@ -9,10 +9,10 @@ class CheckboxesFieldGenerator extends BaseFieldGenerator
      * @var array
      */
     protected $defaultConfigs = [
-        'horizontal'   => true,
-        'options'      => [],
-        'attributes'   => [],
-        'defaultValue' => []
+        'horizontal' => true,
+        'options' => [],
+        'attributes' => [],
+        'defaultValue' => [],
     ];
 
     /**
@@ -22,24 +22,28 @@ class CheckboxesFieldGenerator extends BaseFieldGenerator
      */
     final public function generate()
     {
-        $checkedOptions      = $this->fieldValue;
+        $checkedOptions = $this->fieldValue;
         $normalizedFieldName = $this->fieldName . '[]';
-        $markUp              = '';
+        $markUp = '';
 
         foreach ($this->config('options') as $optionText => $optionValue) {
             $escapedOptionText = esc_html($optionText);
-            $checked           = in_array((string)$optionValue, (array)$checkedOptions) ? 'checked' : null;
+            $checked = in_array((string) $optionValue, (array) $checkedOptions) ? 'checked' : null;
 
-            $allAttributes = static::convertToAttributesString(array_merge(
-                $this->config('attributes'),
-                ['type' => 'checkbox', 'name' => $normalizedFieldName, 'value' => $optionValue, 'checked' => $checked]
-            ));
+            $allAttributes = static::convertToAttributesString(
+                array_merge($this->config('attributes'), [
+                    'type' => 'checkbox',
+                    'name' => $normalizedFieldName,
+                    'value' => $optionValue,
+                    'checked' => $checked,
+                ])
+            );
 
             $checkboxHtml = "<input {$allAttributes}>";
 
             $markUp .= "<label>{$checkboxHtml}{$escapedOptionText}</label>\n";
 
-            if ( ! $this->config('horizontal')) {
+            if (!$this->config('horizontal')) {
                 $markUp .= "<br>\n";
             }
         }
@@ -61,5 +65,4 @@ class CheckboxesFieldGenerator extends BaseFieldGenerator
     {
         return is_array($value);
     }
-
 }

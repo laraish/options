@@ -9,11 +9,11 @@ class TextareaFieldGenerator extends BaseFieldGenerator
      * @var array
      */
     protected $defaultConfigs = [
-        'attributes'   => [
+        'attributes' => [
             'cols' => 60,
-            'rows' => 5
+            'rows' => 5,
         ],
-        'defaultValue' => ''
+        'defaultValue' => '',
     ];
 
     /**
@@ -23,8 +23,10 @@ class TextareaFieldGenerator extends BaseFieldGenerator
      */
     final public function generate()
     {
-        $allAttributes = static::convertToAttributesString(array_merge($this->config('attributes'), ['name' => $this->fieldName]));
-        $innerHTML     = $this->fieldValue;
+        $allAttributes = static::convertToAttributesString(
+            array_merge($this->config('attributes'), ['name' => $this->fieldName])
+        );
+        $innerHTML = $this->fieldValue;
 
         return "<textarea {$allAttributes}>{$innerHTML}</textarea>" . $this->generateDescription();
     }

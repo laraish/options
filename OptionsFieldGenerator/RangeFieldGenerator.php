@@ -9,11 +9,11 @@ class RangeFieldGenerator extends BaseFieldGenerator
      * @var array
      */
     protected $defaultConfigs = [
-        'attributes'   => [
+        'attributes' => [
             'min' => 0,
-            'max' => 100
+            'max' => 100,
         ],
-        'defaultValue' => null
+        'defaultValue' => null,
     ];
 
     /**
@@ -36,10 +36,13 @@ class RangeFieldGenerator extends BaseFieldGenerator
     public function sanitize($value)
     {
         $attributes = $this->config('attributes');
-        $max        = $attributes['max'];
-        $min        = $attributes['min'];
+        $max = $attributes['max'];
+        $min = $attributes['min'];
 
-        return $this->validateWithErrorMessage($value, "`{$this->config('title')}` must be a number between {$min} and {$max}.");
+        return $this->validateWithErrorMessage(
+            $value,
+            "`{$this->config('title')}` must be a number between {$min} and {$max}."
+        );
     }
 
     /**
@@ -55,9 +58,9 @@ class RangeFieldGenerator extends BaseFieldGenerator
     protected function validateFieldValue($value)
     {
         $attributes = $this->config('attributes');
-        $max        = $attributes['max'];
-        $min        = $attributes['min'];
+        $max = $attributes['max'];
+        $min = $attributes['min'];
 
-        return $value >= $min AND $value <= $max;
+        return $value >= $min and $value <= $max;
     }
 }

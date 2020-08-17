@@ -9,16 +9,16 @@ class MediaFieldGenerator extends BaseFieldGenerator
      * @var array
      */
     protected $defaultConfigs = [
-        'button_text'          => null,
+        'button_text' => null,
         'media_uploader_title' => null,
-        'defaultValue'         => [],
+        'defaultValue' => [],
     ];
 
-    static protected $scripts = ['js/MediaFieldGenerator.js'];
+    protected static $scripts = ['js/MediaFieldGenerator.js'];
 
-    static protected $styles = ['css/sharedStyle.css', 'css/media.css'];
+    protected static $styles = ['css/sharedStyle.css', 'css/media.css'];
 
-    static protected $template = 'MediaFieldGenerator.blade.php';
+    protected static $template = 'MediaFieldGenerator.blade.php';
 
     /**
      * Generate the field markup.
@@ -31,31 +31,32 @@ class MediaFieldGenerator extends BaseFieldGenerator
         $fieldName = $this->fieldName;
 
         $data = [
-            'has_value_class'        => '',
-            'media_img_url'          => '',
-            'media_type'             => '',
-            'filename'               => '',
-            'attachment_id'          => 0,
-            'description'            => $this->generateDescription(),
-            'button_text'            => $this->config('button_text') ?: __('Add Media'),
-            'field_name'             => $fieldName,
-            'media_uploader_options' => esc_attr(json_encode([
-                'multiple' => false,
-                'title'    => $this->config('media_uploader_title'),
-            ]))
+            'has_value_class' => '',
+            'media_img_url' => '',
+            'media_type' => '',
+            'filename' => '',
+            'attachment_id' => 0,
+            'description' => $this->generateDescription(),
+            'button_text' => $this->config('button_text') ?: __('Add Media'),
+            'field_name' => $fieldName,
+            'media_uploader_options' => esc_attr(
+                json_encode([
+                    'multiple' => false,
+                    'title' => $this->config('media_uploader_title'),
+                ])
+            ),
         ];
 
         if ($mediaInfo) {
             $data['has_value_class'] = 'laraish-has-value';
-            $data['media_img_url']   = $mediaInfo['type'] == 'image' ? $mediaInfo['url'] : $mediaInfo['icon'];
-            $data['attachment_id']   = $mediaInfo['id'];
-            $data['media_type']      = $mediaInfo['type'];
-            $data['filename']        = $mediaInfo['filename'];
+            $data['media_img_url'] = $mediaInfo['type'] == 'image' ? $mediaInfo['url'] : $mediaInfo['icon'];
+            $data['attachment_id'] = $mediaInfo['id'];
+            $data['media_type'] = $mediaInfo['type'];
+            $data['filename'] = $mediaInfo['filename'];
         }
 
         return $this->renderTemplate($data);
     }
-
 
     protected function validateFieldValue($value)
     {

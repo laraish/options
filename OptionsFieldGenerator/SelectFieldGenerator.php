@@ -11,16 +11,16 @@ class SelectFieldGenerator extends BaseFieldGenerator
      * @var array
      */
     protected $defaultConfigs = [
-        'richMode'     => false,
-        'options'      => [],
-        'multiple'     => false,
-        'attributes'   => ['class' => 'regular-text'],
-        'defaultValue' => ''
+        'richMode' => false,
+        'options' => [],
+        'multiple' => false,
+        'attributes' => ['class' => 'regular-text'],
+        'defaultValue' => '',
     ];
 
-    static protected $scripts = ['js/libs/selectize.js', 'js/selectFieldGenerator.js'];
+    protected static $scripts = ['js/libs/selectize.js', 'js/selectFieldGenerator.js'];
 
-    static protected $styles = ['css/libs/selectize.css'];
+    protected static $styles = ['css/libs/selectize.css'];
 
     /**
      * Generate the field markup.
@@ -29,7 +29,7 @@ class SelectFieldGenerator extends BaseFieldGenerator
      */
     final public function generate()
     {
-        $innerHTML     = '';
+        $innerHTML = '';
         $selectedValue = Arr::cast($this->fieldValue);
 
         if ($this->config('richMode') === true) {
@@ -44,10 +44,13 @@ class SelectFieldGenerator extends BaseFieldGenerator
 
         foreach ($options as $optionText => $optionValue) {
             // if it's not an option group
-            if ( ! is_array($optionValue)) {
+            if (!is_array($optionValue)) {
                 $escapedOptionText = esc_html($optionText);
-                $isSelected        = in_array((string)$optionValue, $selectedValue);
-                $OptionAttributes  = static::convertToAttributesString(['value' => $optionValue, 'selected' => $isSelected ? 'selected' : null]);
+                $isSelected = in_array((string) $optionValue, $selectedValue);
+                $OptionAttributes = static::convertToAttributesString([
+                    'value' => $optionValue,
+                    'selected' => $isSelected ? 'selected' : null,
+                ]);
                 $innerHTML .= "<option {$OptionAttributes}>{$escapedOptionText}</option>";
             } else {
                 $innerHTML .= "<optgroup label=\"{$optionText}\">";
@@ -56,8 +59,11 @@ class SelectFieldGenerator extends BaseFieldGenerator
                 }
                 foreach ($optionValue as $optionTextInGroup => $optionValueInGroup) {
                     $escapedOptionText = esc_html($optionTextInGroup);
-                    $isSelected        = in_array((string)$optionValueInGroup, $selectedValue);
-                    $OptionAttributes  = static::convertToAttributesString(['value' => $optionValueInGroup, 'selected' => $isSelected ? 'selected' : null]);
+                    $isSelected = in_array((string) $optionValueInGroup, $selectedValue);
+                    $OptionAttributes = static::convertToAttributesString([
+                        'value' => $optionValueInGroup,
+                        'selected' => $isSelected ? 'selected' : null,
+                    ]);
                     $innerHTML .= "<option {$OptionAttributes}>{$escapedOptionText}</option>";
                 }
                 $innerHTML .= '</optgroup>';
@@ -66,9 +72,9 @@ class SelectFieldGenerator extends BaseFieldGenerator
 
         // Add placeholder if possible
         $placeholder = $this->config('placeholder');
-        if ( ! empty($innerHTML) AND $placeholder AND $selectedValue === null) {
+        if (!empty($innerHTML) and $placeholder and $selectedValue === null) {
             $placeHolderOption = "<option value=\"\" disabled selected=\"selected\">{$placeholder}</option>";
-            $innerHTML         = $placeHolderOption . $innerHTML;
+            $innerHTML = $placeHolderOption . $innerHTML;
         }
 
         // If `multiple` is allowed append `[]` to the end of `name` attribute,
@@ -94,7 +100,6 @@ class SelectFieldGenerator extends BaseFieldGenerator
         return $html;
     }
 
-
     /**
      * An option could be potentially set to a value before the field saving its value to the database for the first time.
      * This method will be automatically called with the current value of the field if the field has a value.
@@ -107,7 +112,6 @@ class SelectFieldGenerator extends BaseFieldGenerator
      */
     protected function validateFieldValue($value)
     {
-        return is_string($value) OR is_array($value);
+        return is_string($value) or is_array($value);
     }
-
 }

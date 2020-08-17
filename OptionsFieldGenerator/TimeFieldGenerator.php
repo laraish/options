@@ -9,8 +9,8 @@ class TimeFieldGenerator extends BaseFieldGenerator
      * @var array
      */
     protected $defaultConfigs = [
-        'attributes'   => ['class' => 'regular-text'],
-        'defaultValue' => ''
+        'attributes' => ['class' => 'regular-text'],
+        'defaultValue' => '',
     ];
 
     /**

@@ -20,12 +20,15 @@
     ],
     "require": {
         "php": "^7.2",
-        "laraish/contracts": "0.6.*",
-        "laraish/support": "0.6.*"
+        "laraish/contracts": "^1.0",
+        "laraish/support": "^1.0"
     },
     "autoload": {
         "psr-4": {
             "Laraish\\Options\\": "./"
         }
+    },
+    "scripts": {
+        "fix-cs": ["prettier **/*.php --write"]
     }
 }

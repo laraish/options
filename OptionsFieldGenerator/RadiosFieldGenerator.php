@@ -9,10 +9,10 @@ class RadiosFieldGenerator extends BaseFieldGenerator
      * @var array
      */
     protected $defaultConfigs = [
-        'horizontal'   => true,
-        'options'      => [],
-        'attributes'   => [],
-        'defaultValue' => ''
+        'horizontal' => true,
+        'options' => [],
+        'attributes' => [],
+        'defaultValue' => '',
     ];
 
     /**
@@ -23,25 +23,24 @@ class RadiosFieldGenerator extends BaseFieldGenerator
     final public function generate()
     {
         $savedValue = $this->fieldValue;
-        $markUp     = '';
+        $markUp = '';
 
         foreach ($this->config('options') as $optionText => $optionValue) {
             $escapedOptionText = esc_html($optionText);
-            $checked           = $optionValue == $savedValue ? 'checked' : null;
+            $checked = $optionValue == $savedValue ? 'checked' : null;
 
-            $attributes = static::convertToAttributesString(array_merge(
-                $this->config('attributes'),
-                [
-                    'name'    => $this->fieldName,
-                    'type'    => 'radio',
-                    'value'   => $optionValue,
-                    'checked' => $checked
-                ]
-            ));
-            $inputHtml  = "<input $attributes>";
+            $attributes = static::convertToAttributesString(
+                array_merge($this->config('attributes'), [
+                    'name' => $this->fieldName,
+                    'type' => 'radio',
+                    'value' => $optionValue,
+                    'checked' => $checked,
+                ])
+            );
+            $inputHtml = "<input $attributes>";
 
             $markUp .= "<label>{$inputHtml}{$escapedOptionText}</label>\n";
-            if ( ! $this->config('horizontal')) {
+            if (!$this->config('horizontal')) {
                 $markUp .= "<br>\n";
             }
         }

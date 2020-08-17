@@ -9,8 +9,8 @@ class TextFieldGenerator extends BaseFieldGenerator
      * @var array
      */
     protected $defaultConfigs = [
-        'attributes'   => ['class' => 'regular-text'],
-        'defaultValue' => ''
+        'attributes' => ['class' => 'regular-text'],
+        'defaultValue' => '',
     ];
 
     /**
@@ -37,5 +37,4 @@ class TextFieldGenerator extends BaseFieldGenerator
     {
         return is_string($value);
     }
-
 }

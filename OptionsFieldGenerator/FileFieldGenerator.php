@@ -9,18 +9,18 @@ class FileFieldGenerator extends BaseFieldGenerator
      * @var array
      */
     protected $defaultConfigs = [
-        'attributes'   => [],
-        'maxFileSize'  => null,
-        'isJson'       => false,
-        'assoc'        => false,
-        'defaultValue' => []
+        'attributes' => [],
+        'maxFileSize' => null,
+        'isJson' => false,
+        'assoc' => false,
+        'defaultValue' => [],
     ];
 
-    static protected $scripts = ['js/FileFieldGenerator.js'];
+    protected static $scripts = ['js/FileFieldGenerator.js'];
 
-    static protected $styles = ['css/sharedStyle.css', 'css/media.css'];
+    protected static $styles = ['css/sharedStyle.css', 'css/media.css'];
 
-    static protected $template = 'FileFieldGenerator.blade.php';
+    protected static $template = 'FileFieldGenerator.blade.php';
 
     /**
      * Generate the file field.
@@ -32,11 +32,11 @@ class FileFieldGenerator extends BaseFieldGenerator
     final public function generate()
     {
         $data = [
-            'field_name'      => $this->fieldName,
+            'field_name' => $this->fieldName,
             'has_value_class' => $this->fieldValue ? 'laraish-has-value' : '',
-            'media_img_url'   => home_url('/wp-includes/images/media/document.png'),
-            'filename'        => $this->fieldValue ? $this->fieldValue['filename'] : '',
-            'description'     => $this->generateDescription(),
+            'media_img_url' => home_url('/wp-includes/images/media/document.png'),
+            'filename' => $this->fieldValue ? $this->fieldValue['filename'] : '',
+            'description' => $this->generateDescription(),
         ];
 
         return $this->renderTemplate($data);
@@ -52,7 +52,7 @@ class FileFieldGenerator extends BaseFieldGenerator
     public function sanitize($filesInfo)
     {
         $defaultValue = $this->defaultConfigs['defaultValue'];
-        if ($filesInfo === 'laraish::removeFileField' OR $filesInfo == []) {
+        if ($filesInfo === 'laraish::removeFileField' or $filesInfo == []) {
             return $defaultValue;
         }
 
@@ -61,16 +61,15 @@ class FileFieldGenerator extends BaseFieldGenerator
             return $filesInfo;
         }
 
-        $fieldId     = $this->fieldId;
+        $fieldId = $this->fieldId;
         $maxFileSize = $this->config('maxFileSize');
-        $oldValue    = $this->fieldValue;
+        $oldValue = $this->fieldValue;
 
-        $error    = $filesInfo['error'][$fieldId];
-        $size     = $filesInfo['size'][$fieldId];
+        $error = $filesInfo['error'][$fieldId];
+        $size = $filesInfo['size'][$fieldId];
         $tempFile = $filesInfo['tmp_name'][$fieldId];
         $filename = $filesInfo['name'][$fieldId];
-        $mime     = $filesInfo['type'][$fieldId];
-
+        $mime = $filesInfo['type'][$fieldId];
 
         /*------------------------------------*\
             # check if has error
@@ -86,22 +85,30 @@ class FileFieldGenerator extends BaseFieldGenerator
 
             switch ($error) {
                 case UPLOAD_ERR_INI_SIZE:
-                    $errorMessage = "The uploaded file `{$this->config('title')}` exceeds the upload_max_filesize directive in php.ini.";
+                    $errorMessage = "The uploaded file `{$this->config(
+                        'title'
+                    )}` exceeds the upload_max_filesize directive in php.ini.";
                     break;
                 case UPLOAD_ERR_FORM_SIZE:
-                    $errorMessage = "The uploaded file `{$this->config('title')}` exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.";
+                    $errorMessage = "The uploaded file `{$this->config(
+                        'title'
+                    )}` exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.";
                     break;
                 case UPLOAD_ERR_PARTIAL:
                     $errorMessage = "The uploaded file `{$this->config('title')}` was only partially uploaded.";
                     break;
                 case UPLOAD_ERR_NO_TMP_DIR:
-                    $errorMessage = "Failed to upload the file `{$this->config('title')}`. Missing a upload temporary folder.";
+                    $errorMessage = "Failed to upload the file `{$this->config(
+                        'title'
+                    )}`. Missing a upload temporary folder.";
                     break;
                 case UPLOAD_ERR_CANT_WRITE:
                     $errorMessage = "Failed to write the file `{$this->config('title')}` to disk.";
                     break;
                 case UPLOAD_ERR_EXTENSION:
-                    $errorMessage = "Failed to upload the file `{$this->config('title')}`. A PHP extension stopped the file upload.";
+                    $errorMessage = "Failed to upload the file `{$this->config(
+                        'title'
+                    )}`. A PHP extension stopped the file upload.";
                     break;
                 default:
                     $errorMessage = 'Failed to upload file';
@@ -114,28 +121,28 @@ class FileFieldGenerator extends BaseFieldGenerator
             return $oldValue;
         }
 
-
         /*-----------------------------------------*\
             # check if has exceeded max file size
         \*-----------------------------------------*/
 
         $exceedsMaxFileSize = $maxFileSize ? $size > $maxFileSize : false;
         if ($exceedsMaxFileSize) {
-            $errorMessage = "The uploaded file `{$this->config('title')}` exceeds the maximum file size ({$maxFileSize} bytes)";
+            $errorMessage = "The uploaded file `{$this->config(
+                'title'
+            )}` exceeds the maximum file size ({$maxFileSize} bytes)";
             add_settings_error($fieldId, 'file_upload_failed', $errorMessage);
 
             // restore to old value
             return $oldValue;
         }
 
-
         /*-------------------------------------------*\
             # check if the file is a text base file.
         \*-------------------------------------------*/
 
-        $finfo         = new \finfo(FILEINFO_MIME);
-        $type          = $finfo->file($tempFile);
-        $isNotTextFile = ! preg_match('@text|json@', $type);
+        $finfo = new \finfo(FILEINFO_MIME);
+        $type = $finfo->file($tempFile);
+        $isNotTextFile = !preg_match('@text|json@', $type);
         if ($isNotTextFile) {
             $errorMessage = "The format of uploaded file `{$this->config('title')}` is not acceptable.";
             add_settings_error($fieldId, 'file_upload_failed', $errorMessage);
@@ -144,21 +151,20 @@ class FileFieldGenerator extends BaseFieldGenerator
             return $oldValue;
         }
 
-
         /*------------------------------------*\
             # finally we can save our data.
         \*------------------------------------*/
 
         $data = [
             'filename' => $filename,
-            'mime'     => $mime,
-            'size'     => $size
+            'mime' => $mime,
+            'size' => $size,
         ];
 
         $content = $data['content'] = file_get_contents($tempFile);
         if ($this->config('isJson')) {
             $json = json_decode($content, $this->config('assoc') === true ? true : false);
-            if ( ! $json) {
+            if (!$json) {
                 $errorMessage = "The uploaded file `{$this->config('title')}` should be a valid json file.";
                 add_settings_error($fieldId, 'file_upload_failed', $errorMessage);
 
@@ -186,5 +192,4 @@ class FileFieldGenerator extends BaseFieldGenerator
     {
         return isset($value['content']);
     }
-
 }

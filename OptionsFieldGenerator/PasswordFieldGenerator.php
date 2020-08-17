@@ -9,8 +9,8 @@ class PasswordFieldGenerator extends BaseFieldGenerator
      * @var array
      */
     protected $defaultConfigs = [
-        'attributes'   => ['class' => 'regular-text'],
-        'defaultValue' => ''
+        'attributes' => ['class' => 'regular-text'],
+        'defaultValue' => '',
     ];
 
     /**
@@ -20,7 +20,9 @@ class PasswordFieldGenerator extends BaseFieldGenerator
      */
     final public function generate()
     {
-        $allAttributes = static::convertToAttributesString(array_merge($this->config('attributes'), ['name' => $this->fieldName]));
+        $allAttributes = static::convertToAttributesString(
+            array_merge($this->config('attributes'), ['name' => $this->fieldName])
+        );
 
         return $this->generateInput('password', $allAttributes);
     }

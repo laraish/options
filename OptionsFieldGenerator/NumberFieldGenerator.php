@@ -9,8 +9,8 @@ class NumberFieldGenerator extends BaseFieldGenerator
      * @var array
      */
     protected $defaultConfigs = [
-        'attributes'   => ['class' => 'regular-text'],
-        'defaultValue' => null
+        'attributes' => ['class' => 'regular-text'],
+        'defaultValue' => null,
     ];
 
     /**
