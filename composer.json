@@ -19,9 +19,9 @@
         }
     ],
     "require": {
-        "php": "^7.2",
-        "laraish/contracts": "^1.0",
-        "laraish/support": "^1.0"
+        "php": "^7.3",
+        "laraish/contracts": "^2.0",
+        "laraish/support": "^2.0"
     },
     "autoload": {
         "psr-4": {
