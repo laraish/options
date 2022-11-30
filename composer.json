@@ -1,16 +1,16 @@
 {
     "name": "laraish/options",
-    "description": "Package for creating options page in WordPress.",
+    "description": "Package for creating options page in WordPress, updated fork.",
     "keywords": [
         "framework",
         "laravel",
         "wordpress"
     ],
     "license": "MIT",
-    "homepage": "https://github.com/laraish/options",
+    "homepage": "https://github.com/thanasisxan/laraish-options",
     "support": {
-        "issues": "https://github.com/laraish/options/issues",
-        "source": "https://github.com/laraish/options"
+        "issues": "https://github.com/thanasisxan/laraish-options/issues",
+        "source": "https://github.com/thanasisxan/laraish-options"
     },
     "authors": [
         {
@@ -19,9 +19,9 @@
         }
     ],
     "require": {
-        "php": "^7.3",
-        "laraish/contracts": "^2.0",
-        "laraish/support": "^2.0"
+        "php": "^8.0",
+        "laraish/contracts": "^3.0",
+        "laraish/support": "^3.0"
     },
     "autoload": {
         "psr-4": {
@@ -30,5 +30,15 @@
     },
     "scripts": {
         "fix-cs": ["prettier **/*.php --write"]
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/thanasisxan/laraish-contracts"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/thanasisxan/laraish-support"
+        }
+    ]
 }
